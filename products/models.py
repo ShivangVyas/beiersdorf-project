@@ -10,3 +10,6 @@ class Product(models.Model):
     carbohydrate = models.FloatField()
     fat = models.FloatField()
     protein = models.FloatField()
+
+    def __str__(self):
+        return self.name

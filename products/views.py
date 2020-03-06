@@ -1,8 +1,15 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .models import Product
 from django.db.models import Q
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from .models import Product
+from .serializers import ProductSerializer
 
 
 def index(request):
@@ -22,3 +29,13 @@ def search_product(request):
     else:
         return HttpResponseRedirect('/products')
 
+
+class content_list(APIView):
+
+    def get(self, request):
+        product1 = Product.objects.all()
+        serializer = ProductSerializer(product1, many=True)
+        return Response(serializer.data)
+
+    def post(self):
+        pass
