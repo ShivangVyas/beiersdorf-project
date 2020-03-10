@@ -33,9 +33,25 @@ def search_product(request):
 class content_list(APIView):
 
     def get(self, request):
-        product1 = Product.objects.all()
-        serializer = ProductSerializer(product1, many=True)
+        all_products = Product.objects.all()
+        serializer = ProductSerializer(all_products, many=True)
         return Response(serializer.data)
 
     def post(self):
         pass
+
+
+class product_content(APIView):
+
+    def get(self, request):
+        product_name = request.GET['product_name']
+        single_product = Product.objects.filter(Q(name__iexact=product_name))
+        content_serializer = ProductSerializer(single_product, many=True)
+        return Response(content_serializer.data)
+
+    def post(self):
+        pass
+
+
+class process_image(APIView):
+    pass

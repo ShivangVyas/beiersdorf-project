@@ -22,7 +22,9 @@ from products import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),
-    path('contents/', views.content_list.as_view())
+    path('contents/', views.content_list.as_view()),
+    path('process_image/', views.process_image.as_view()),
+    path('product_content/', views.product_content.as_view())
 ]
 
 
