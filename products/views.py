@@ -60,11 +60,20 @@ class process_image(APIView):
 
     def get(self, request):
         encoded_image = request.GET['encoded_image']
-        #decoding and saving image
+        encoded_image = encoded_image.replace(' ', '+')
+        # f1 = open('check_encoded_strin.txt', 'w')
+        # f1.write(encoded_image)
+        # f1.close()
+        # decoding and saving image
         decoded_image_path = r'D:\Personal_Projects\Beiersdorf_Project_v2\products\DL\decoded_image.jpg'
         file_obj = open(decoded_image_path, 'wb')
         file_obj.write(base64.b64decode(encoded_image))
         file_obj.close()
+
+        # call trained CNN model to classify object
         image_label = classify_image(decoded_image_path)
-        content = {'class': image_label}
-        return Response(content)
+
+        # get the contents of the classified object and serialize it to convert into json format
+        products_and_content = Product.objects.filter(Q(name__iexact=image_label))
+        products_and_content_serializer = ProductSerializer(products_and_content, many=True)
+        return Response(products_and_content_serializer.data)
